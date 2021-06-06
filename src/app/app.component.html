@@ -1,0 +1,27 @@
+<div class="tree">
+    <ul>
+        <ng-container *ngTemplateOutlet="folder; context: {folders: tree}"></ng-container>
+    </ul>
+</div>
+
+<!-- folder -->
+<ng-template let-folders="folders" #folder>
+    <ng-container *ngFor="let item of folders">
+        <ng-container *ngTemplateOutlet="list; context: {item: item}"></ng-container>
+    </ng-container>
+</ng-template>
+
+<!-- list -->
+<ng-template #list
+             let-item="item" >
+    <li [class.parent_li]="item?.children?.length"
+        [class.selected]="item?.selected">
+        <div (click)="onClick(item)">
+            <span>{{item.name}}</span>
+            <span *ngIf="item.type === 'folder'">Файлов: {{item.children.length}}</span>
+        </div>
+        <ul *ngIf="item?.children?.length && item.expanded">
+            <ng-container *ngTemplateOutlet="folder; context: {folders: item.children}"></ng-container>
+        </ul>
+    </li>
+</ng-template>
